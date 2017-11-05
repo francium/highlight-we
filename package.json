@@ -1,0 +1,24 @@
+{
+  "name": "highlight-we",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "watch": "webpack -w",
+    "load": "web-ext run -f /bin/firefox-developer -u abc.xyz"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1",
+    "lodash": "^4.17.4",
+    "web-ext": "^2.2.2",
+    "webpack": "^3.7.1"
+  },
+  "dependencies": {
+    "text-highlighter": "file:../texthighlighter"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "manifest_version": 2,
+  "name": "Highlighter",
+  "version": "1.0",
+
+  "icons": {
+    "48": "icons/border-48.png"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://*/*"],
+      "js": ["dist/bundle.js"]
+    }
+  ]
+
+}
