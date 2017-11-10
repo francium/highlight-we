@@ -1,4 +1,4 @@
-import TextHighlighter from 'text-highlighter';
+import Highlighter from 'highlight-page';
 import UI from './ui';
 
 
@@ -6,18 +6,15 @@ class App {
   constructor() {
     this.root = document.body;
 
-    const thl = new TextHighlighter(this.root);
+    const thl = new Highlighter(this.root);
 
     this.ui = new UI(this.root);
 
-    this.root.onmousedown = (event) => {
-    };
-
-    document.onkeypress = (event) => {
+    document.addEventListener('keydown', (event) => {
       if (event.key === "m") {
         thl.doHighlight();
       }
-    };
+    });
   }
 }
 
