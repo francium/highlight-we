@@ -2,46 +2,24 @@ export default class UI {
 
   constructor(root) {
     this.root = root;
-    this.uiNode = undefined;
+    this.box = undefined;
   }
 
   draw(x, y) {
-    this.clearUI();
-
-    this.uiNode = document.createElement('div');
-    this.uiNode.setAttribute('id', 'ccFranciumHighlight');
-
-    const nodeContent = document.createTextNode('Hello, World!');
-
     let callback = function(event) {
       console.log('button click');
     };
 
-    const but = this.button(callback, this.uiNode, [
-      ['background', 'white'],
-      ['color', 'gray']
-    ]);
-    this.uiNode.appendChild(but);
-
-    this.uiNode.appendChild(nodeContent);
-    this.root.appendChild(this.uiNode);
-
-    this.uiNode.style.position = 'absolute';
-    this.uiNode.style.zIndex = 999;
-    this.uiNode.style.background = '#999';
-    this.uiNode.style.borderRadius = '5px';
-    this.uiNode.style.color = 'black';
-
-    const w = this.uiNode.offsetWidth;
-    const h = this.uiNode.offsetHeight;
-
-    this.uiNode.style.left = `${x - w/2}px`;
-    this.uiNode.style.top = `${y}px`;
-  }
-
-  clearUI() {
-    if (this.uiNode) {
-      this.uiNode.remove();
+    const mountPoint = this.mountLocation();
+    if (mountPoint) {
+      this.drawBox(
+        mountPoint.width / 2 + mountPoint.left - 96/2,
+        mountPoint.top - 32,
+        96,
+        32
+      );
+    } else {
+      this.hideBox();
     }
   }
 
@@ -59,5 +37,43 @@ export default class UI {
     root.appendChild(but);
     return but;
   }
+
+  mountLocation() {
+    let sel = document.getSelection();
+    if (sel.toString()) {
+      const selRange = sel.getRangeAt(0);
+      const boundingBox = selRange.getBoundingClientRect();
+      const topOffset = document.documentElement.scrollTop;
+      return {
+        left: boundingBox.left,
+        top: boundingBox.top + topOffset,
+        width: boundingBox.width,
+        height: boundingBox.height
+      };
+    } else {
+      return undefined;
+    }
+  }
+
+  drawBox(x, y, w, h) {
+    if (!this.box) {
+      this.box = document.createElement('div');
+      this.box.style.position = 'absolute';
+      this.box.style.background = '#222';
+      document.body.appendChild(this.box);
+    }
+    this.box.style.left = x + 'px';
+    this.box.style.top = y + 'px';
+    this.box.style.width = w + 'px';
+    this.box.style.height = h + 'px';
+  }
+
+  hideBox() {
+    if (this.box) {
+      this.box.style.top = '-100px';
+      this.box.style.left = '-100px';
+    }
+  }
+
 
 }
