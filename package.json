@@ -2,22 +2,57 @@
   "name": "highlight-we",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "scripts": {
-    "build": "webpack",
-    "watch": "webpack -w",
-    "load": "web-ext run -f /bin/firefox-developer -u abc.xyz"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "babel-loader": "^7.1.2",
-    "babel-preset-env": "^1.6.1",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "lint": "eslint src/**/*.js?",
+    "load": "web-ext run -f /bin/firefox-nightly -u http://www94.web.cern.ch/WWW94/Welcome.html",
+    "test": "jest",
+    "watch": "webpack -w"
+  },
+  "dependencies": {
+    "babel-plugin-transform-inline-environment-variables": "^0.2.0",
     "debounce": "^1.1.0",
     "highlight-page": "*",
+    "prop-types": "^15.6.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "css-loader": "^0.28.7",
+    "eslint": "^4.13.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.5.1",
+    "raw-loader": "^0.5.1",
+    "style-loader": "^0.19.1",
     "web-ext": "^2.2.2",
     "webpack": "^3.7.1"
   },
-  "dependencies": {}
+  "babel": {
+    "presets": [
+      [
+        "env",
+        {
+          "targets": {
+            "browsers": [
+              "last 2 Firefox versions"
+            ]
+          }
+        }
+      ],
+      "react"
+    ],
+    "plugins": [
+      "transform-inline-environment-variables"
+    ]
+  }
 }

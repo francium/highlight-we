@@ -7,10 +7,14 @@
     "48": "icons/border-48.png"
   },
 
+  "permissions": [
+    "storage"
+  ],
+
   "content_scripts": [
     {
       "matches": ["*://*/*"],
-      "js": ["dist/bundle.js"]
+      "js": ["dist/highlight-we.bundle.js"]
     }
   ]
 

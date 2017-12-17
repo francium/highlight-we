@@ -1,0 +1,45 @@
+.Popup {
+  position: absolute;
+  padding-bottom: 0.67em;
+}
+
+.actionButtonWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0.2em;
+  background: #222;
+  border-radius: 0.5em;
+  box-shadow: 0px 1px 4px 2px #22222240;
+}
+
+.actionButtonWrapper::after {
+  position: absolute;
+  content: '';
+  top: 1.75em;
+  width: 0;
+  height: 0;
+  border-radius: 0.25em;
+  border-left: 0.5em solid transparent;
+  border-right: 0.5em solid transparent;
+  border-top: 0.75em solid #222;
+}
+
+button {
+  padding: 0.25em 0.25em;
+  margin: 0.15em 0.25em;
+  display: flex;
+  background: none;
+  border: none;
+}
+
+button svg {
+  height: 1.5em;
+  width: 1.5em;
+  filter: invert(0.925);
+}
+
+button:hover {
+  filter: brightness(2);
+}
