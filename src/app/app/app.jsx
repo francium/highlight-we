@@ -68,7 +68,7 @@ export default class App extends BaseComponent {
   registerListeners() {
     document.addEventListener(
       'selectionchange',
-      event => this.onSelectionChange(document.getSelection()),
+      () => this.onSelectionChange(document.getSelection()),
     );
 
     document.body.addEventListener(

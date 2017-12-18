@@ -27,29 +27,9 @@ export default class Popup extends BaseComponent {
 
 
   get style() {
-    const { top, left } = this.centeredPosition;
-    return { top, left };
-  }
-
-
-  get centeredPosition() {
-    if (this.componentElement) {
-      const { height: thisHeight, width: thisWidth } =
-        this.componentElement.getBoundingClientRect();
-      // console.log(this.componentElement.getBoundingClientRect());
-      return {
-        top: this.props.selectionBox.top - thisHeight,
-        left:
-          this.props.selectionBox.left +
-          (
-            (this.props.selectionBox.width / 2) - (thisWidth / 2)
-          ),
-      };
-    }
-
     return {
       top: this.props.selectionBox.top,
-      left: this.props.selectionBox.left,
+      left: this.props.selectionBox.left + (this.props.selectionBox.width / 2),
     };
   }
 
@@ -101,7 +81,9 @@ export default class Popup extends BaseComponent {
         style={this.style}
         ref={(element) => { this.componentElement = element; }}
       >
-        {this.viewMode()}
+        <div className={styles.popupContainer}>
+          {this.viewMode()}
+        </div>
       </div>
     );
   }
