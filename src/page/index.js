@@ -1,4 +1,4 @@
-import Logger from './app/util/logger';
+import Logger from './../common/util/logger';
 import bootstrap from './bootstrap';
 
 

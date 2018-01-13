@@ -7,11 +7,13 @@
   "license": "ISC",
   "main": "index.js",
   "scripts": {
-    "build": "webpack",
+    "build": "npm run build:menu && npm run build:page",
+    "build:menu": "webpack --config webpack/menu.webpack.config.js",
+    "build:page": "webpack --config webpack/page.webpack.config.js",
     "lint": "eslint src/**/*.js?",
     "load": "web-ext run -f /bin/firefox-nightly -u http://www94.web.cern.ch/WWW94/Welcome.html",
-    "test": "jest",
-    "watch": "webpack -w"
+    "watch:menu": "webpack -w --config webpack/menu.webpack.config.js",
+    "watch:page": "webpack -w --config webpack/page.webpack.config.js"
   },
   "dependencies": {
     "babel-plugin-transform-inline-environment-variables": "^0.2.0",

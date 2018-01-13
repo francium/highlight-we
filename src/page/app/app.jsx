@@ -1,22 +1,27 @@
-/* global document */
-/* global window */
+/* global browser, document, window */
 
 import React from 'react';
 
-import BaseComponent from '../base-component/base-component';
-import Highlight from '../highlight/highlight';
+import BaseComponent from '../../common/base-component/base-component';
+import Highlight from '../../common/highlight/highlight';
 import Popup from '../popup/popup';
 import PopupActionEnum from '../popup/popup-action';
 import PopupModeEnum from '../popup/popup-mode';
-import * as util from '../util/util';
-import Storage from '../storage/storage';
-import config from '../config';
+import * as util from '../../common/util/util';
+import Storage from '../../common/storage/storage';
+import config from '../../common/config';
 
 
 export default class App extends BaseComponent {
 
   constructor(props) {
     super(props);
+
+    this.storage = new Storage(config.write_delay);
+    this.highlighter = new Highlight(document.body);
+
+    this.registerListeners();
+
     this.state = {
       selection: {
         width: 0,
@@ -24,14 +29,12 @@ export default class App extends BaseComponent {
         top: 0,
         left: 0,
       },
+      enabled: false,
       popupHidden: true,
       activeHighlight: undefined,
       popupMode: undefined,
+      highlightColor: this.highlighter.color,
     };
-
-    this.storage = new Storage(config.write_delay);
-    this.highlighter = new Highlight(document.body);
-    this.registerListeners();
   }
 
 
@@ -66,6 +69,21 @@ export default class App extends BaseComponent {
 
 
   registerListeners() {
+    browser.runtime.onMessage.addListener((request) => {
+      switch (request.message) {
+        case 'highlightingEnabled?':
+          return Promise.resolve({ response: this.state.enabled });
+
+        case 'highlightingToggle':
+          this.setState({ enabled: !this.state.enabled });
+          return Promise.resolve({ response: this.state.enabled });
+
+        default:
+          this.logger.debug('Unknown runtime message: ', request);
+          return Promise.resolve({ response: 'Unknown message' });
+      }
+    });
+
     document.addEventListener(
       'selectionchange',
       () => this.onSelectionChange(document.getSelection()),
@@ -129,7 +147,7 @@ export default class App extends BaseComponent {
   }
 
 
-  onPopupAction(action) {
+  onPopupAction(action, maybeValue) {
     switch (action) {
       case PopupActionEnum.DoHighlight:
         this.highlighter.doHighlight();
@@ -147,6 +165,12 @@ export default class App extends BaseComponent {
         this.setState({ activeHighlight: undefined });
         break;
 
+      case PopupActionEnum.DoColorChange:
+        this.logger.debug('Setting color to:', maybeValue);
+        this.highlighter.color = maybeValue;
+        this.setState({ highlightColor: maybeValue });
+        break;
+
       default:
         this.logger.warn('Unknown PopupActionEnum:', action);
     }
@@ -154,11 +178,12 @@ export default class App extends BaseComponent {
 
 
   viewPopup() {
-    return this.state.popupHidden ? false : (
+    return (!this.state.enabled || this.state.popupHidden) ? false : (
       <Popup
         popupMode={this.state.popupMode}
+        selectedColor={this.state.highlightColor}
         selectionBox={this.state.selectionBox}
-        actionHandler={action => this.onPopupAction(action)}
+        actionHandler={(action, maybeValue) => this.onPopupAction(action, maybeValue)}
       />
     );
   }

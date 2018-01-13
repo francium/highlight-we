@@ -10,6 +10,24 @@ export default class Highlight {
 
 
   /**
+   * Get highlight color
+   * @return {string} CSS color string
+   */
+  get color() {
+    return this.highlighter.getColor();
+  }
+
+
+  /**
+   * Set highlight color
+   * @param  {[type]} color CSS color
+   */
+  set color(color) {
+    this.highlighter.setColor(color);
+  }
+
+
+  /**
    * Highlight the selected element
    * @return {void}
    */

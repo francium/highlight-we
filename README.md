@@ -9,7 +9,7 @@ Firefox extension for highlighting text on webpages.
 
 - [x] Highlight text on web pages
 - [x] Save highlights to the browser's local storage
-- [ ] Configure highlight color
+- [x] Configure highlight color
 - [ ] Keyboard shortcuts
 - [ ] List annotated urls
 - [ ] Export and import data

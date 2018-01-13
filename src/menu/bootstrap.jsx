@@ -2,9 +2,9 @@
 
 import ReactDOM from 'react-dom';
 import React from 'react';  // Needed for eslint ('render(<App/>...)'')
-import Logger from './app/util/logger';
+import Logger from './../common/util/logger';
 
-import App from './app/app/app';
+import App from './app/app';
 
 
 export default function bootstrap() {

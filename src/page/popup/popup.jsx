@@ -1,14 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import BaseComponent from '../base-component/base-component';
+import BaseComponent from '../../common/base-component/base-component';
 import PopupActionEnum from './popup-action';
 import PopupModeEnum from './popup-mode';
 
 import styles from './popup.css';
 
 import resSVGIconPencil from '../../../res/icon-pencil.svg';
-import resSVGIconNote from '../../../res/icon-note.svg';
 import resSVGIconRemove from '../../../res/icon-remove.svg';
 
 
@@ -17,20 +15,46 @@ export default class Popup extends BaseComponent {
   constructor(props) {
     super(props);
     this.componentElement = undefined;
+    this.state = {
+      showColorSelector: false,
+    };
   }
 
 
-  onAction(action) {
+  onAction(action, maybeValue) {
     this.logger.debug('Popup action:', action);
-    this.props.actionHandler(action);
+    this.props.actionHandler(action, maybeValue);
   }
 
 
-  get style() {
+  onColorSelectClick() {
+    this.setState({ showColorSelector: true });
+  }
+
+
+  onColorChange(event) {
+    event.preventDefault();
+
+    this.onAction(PopupActionEnum.DoColorChange, event.target.value);
+    this.setState({ showColorSelector: false });
+  }
+
+
+  onPopupClick(event) {
+    event.stopPropagation();
+  }
+
+  get popupStyle() {
     return {
       top: this.props.selectionBox.top,
       left: this.props.selectionBox.left + (this.props.selectionBox.width / 2),
     };
+  }
+
+  get colorSelectorStyle() {
+    return {
+      background: this.props.selectedColor,
+    }
   }
 
 
@@ -45,11 +69,17 @@ export default class Popup extends BaseComponent {
               onClick={() => this.onAction(PopupActionEnum.DoHighlight)}
               dangerouslySetInnerHTML={{ __html: resSVGIconPencil }}
             />
-            <button
-              className={styles.actionButton}
-              onClick={() => this.onAction(PopupActionEnum.DoNote)}
-              dangerouslySetInnerHTML={{ __html: resSVGIconNote }}
-            />
+            <select
+              className={styles.colorSelector}
+              style={this.colorSelectorStyle}
+              onChange={event => this.onColorChange(event)}
+              value={this.props.selectedColor}
+            >
+              <option value="rgb(255, 255, 123)">yellow</option>
+              <option value="rgb(255, 180, 228)">pink</option>
+              <option value="rgb(169, 255, 124)">green</option>
+              <option value="rgb(124, 204, 255)">blue</option>
+            </select>
           </div>
         );
         /* eslint-enable react/no-danger */
@@ -78,8 +108,10 @@ export default class Popup extends BaseComponent {
     return (
       <div
         className={styles.Popup}
-        style={this.style}
+        style={this.popupStyle}
         ref={(element) => { this.componentElement = element; }}
+        onClick={event => this.onPopupClick(event)}
+        role="presentation"
       >
         <div className={styles.popupContainer}>
           {this.viewMode()}
@@ -100,6 +132,7 @@ Popup.propTypes = {
     width: PropTypes.number,
   }),
   popupMode: PropTypes.string,  // enum
+  selectedColor: PropTypes.string,
 };
 
 Popup.defaultProps = {
@@ -111,4 +144,5 @@ Popup.defaultProps = {
     width: 0,
   },
   popupMode: PopupModeEnum.NewSelection,
+  selectedColor: 'yellow',
 };
